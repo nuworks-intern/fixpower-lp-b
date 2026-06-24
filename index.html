@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fix Power｜市場連動型プランからの脱出。高圧電力の固定料金プラン</title>
+<meta name="description" content="新電力の市場連動型プランで電気代が高騰していませんか？大手が固定プラン受付を絞る今、Fix Powerなら固定単価で受付中。最短1分の無料シミュレーション、違約金0円。">
+<meta name="theme-color" content="#0F172A">
+<meta property="og:title" content="Fix Power｜市場連動型プランからの脱出">
+<meta property="og:description" content="市場高騰に振り回されない。固定単価プランへ今すぐ切り替え。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fix Power">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Zen+Kaku+Gothic+New:wght@700;900&display=swap" rel="stylesheet">
+<!--
+  ============================================================
+  Fix Power LP-B（A/Bテスト用：新電力強化版）
+  ・フォーム送信先は LP-A と同じバックエンドに合わせて
+    下部 <form id="leadForm"> / <form id="heroForm"> の
+    data-endpoint を差し替えてください（現状はデモ動作）。
+  ・GA4 / 広告計測タグは </head> 直前 と </body> 直前に貼付。
+  ============================================================
+-->
+<style>
+  :root{
+    --ink:#0F172A;          /* ブランドネイビー */
+    --ink-2:#1E293B;
+    --ink-3:#334155;
+    --paper:#FFFFFF;
+    --paper-2:#F8FAFC;
+    --line:#E2E8F0;
+    --text:#1F2937;
+    --text-sub:#64748B;
+    --alert:#F59E0B;        /* 市場高騰＝警告アンバー */
+    --danger:#DC2626;       /* 市場連動の危険ライン */
+    --danger-soft:#FEE2E2;
+    --stable:#10B981;       /* Fix Power＝安定グリーン */
+    --cyan:#38BDF8;         /* 電力アクセント */
+    --shadow:0 10px 30px rgba(15,23,42,.12);
+    --shadow-lg:0 24px 60px rgba(15,23,42,.22);
+    --radius:18px;
+    --maxw:1120px;
+    --font: "Noto Sans JP","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    --font-disp: "Zen Kaku Gothic New","Noto Sans JP","Hiragino Kaku Gothic ProN",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font);color:var(--text);background:var(--paper);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .icon{width:1em;height:1em;display:inline-block;vertical-align:-.14em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+  .boxicon{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  /* 強調ユーティリティ（警告ポスター手法） */
+  .skew{display:inline-block;transform:skewX(-8deg)}
+  .hl-warn{display:inline-block;background:#FACC15;color:#111;font-weight:900;padding:.02em .26em;border-radius:5px;transform:skewX(-8deg);box-shadow:3px 3px 0 rgba(0,0,0,.25)}
+  .hl-warn>span{display:inline-block;transform:skewX(8deg)}
+  .hl-red{color:var(--danger);font-weight:900}
+  .em-big{font-size:1.18em}
+  img{max-width:100%;display:block}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  section{position:relative}
+
+  /* ====== ボタン ====== */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:800;border:none;cursor:pointer;border-radius:999px;transition:transform .15s ease,box-shadow .15s ease,filter .15s ease;line-height:1.2;text-align:center}
+  .btn-cta{background:linear-gradient(135deg,#FBBF24,#F59E0B);color:#1A1205;padding:18px 30px;font-size:clamp(15px,2.4vw,18px);box-shadow:0 12px 26px rgba(245,158,11,.45)}
+  .btn-cta:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(245,158,11,.55)}
+  .btn-cta .arrow{transition:transform .2s ease}
+  .btn-cta:hover .arrow{transform:translateX(4px)}
+  .btn-tel{background:#fff;color:var(--ink);border:2px solid var(--line);padding:14px 22px;font-size:15px}
+  .btn-tel:hover{border-color:var(--ink)}
+  .btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.35);padding:14px 24px;font-size:15px}
+  .btn-ghost:hover{background:rgba(255,255,255,.2)}
+
+  /* ====== ヘッダー ====== */
+  header{position:sticky;top:0;z-index:50;background:rgba(15,23,42,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.08)}
+  .hdr{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;color:#fff;font-weight:900;font-size:20px;letter-spacing:.5px}
+  .logo .spark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),var(--stable));display:grid;place-items:center;color:#fff}
+  .logo .spark .boxicon{width:18px;height:18px;stroke-width:2.4}
+  .hdr-actions{display:flex;align-items:center;gap:12px}
+  .hdr-tel{color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;gap:6px}
+  .hdr-tel small{display:block;font-size:10px;color:#94A3B8;font-weight:500}
+  .hdr .btn-cta{padding:11px 20px;font-size:14px}
+  @media(max-width:720px){.hdr-tel{display:none}.hdr .btn-cta{padding:10px 16px;font-size:13px}}
+
+  /* ====== ヒーロー ====== */
+  .hero{background:radial-gradient(120% 140% at 80% -10%,#1E3A5F 0%,#0F172A 55%);color:#fff;padding:46px 0 60px;overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  .target-pill{display:inline-flex;align-items:center;gap:9px;background:#FACC15;border:none;color:#111;font-weight:900;font-size:clamp(12px,2vw,14px);padding:9px 16px;border-radius:6px;margin-bottom:20px;transform:skewX(-7deg);box-shadow:4px 4px 0 rgba(0,0,0,.3)}
+  .target-pill>*{transform:skewX(7deg)}
+  .target-pill .dot{width:9px;height:9px;border-radius:50%;background:#B91C1C;box-shadow:0 0 0 0 rgba(185,28,28,.7);animation:pulse 1.4s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(185,28,28,.6)}70%{box-shadow:0 0 0 9px rgba(185,28,28,0)}100%{box-shadow:0 0 0 0 rgba(185,28,28,0)}}
+  .hero h1{font-family:var(--font-disp);font-size:clamp(34px,6.2vw,60px);font-weight:900;line-height:1.34;letter-spacing:-1px}
+  .hero h1 .mk{display:inline-block;background:#FACC15;color:#111;padding:.02em .22em;border-radius:6px;transform:skewX(-8deg);box-shadow:4px 4px 0 rgba(0,0,0,.35);white-space:nowrap;margin:.06em 0}
+  .hero h1 .mk>span{display:inline-block;transform:skewX(8deg)}
+  .hero h1 .stable{color:#34D399}
+  .hero h1 .bang{color:#FACC15;font-size:1.1em}
+  .hero-lead{margin-top:18px;font-size:clamp(14px,2.4vw,17px);color:#CBD5E1;line-height:1.85}
+  .hero-lead b{color:#fff}
+  .badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .badge{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:8px 14px;border-radius:10px;font-size:13px;font-weight:700;color:#E2E8F0}
+  .badge .ic{color:var(--stable);font-weight:900}
+  .hero-cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+
+  /* ヒーロー右：簡易フォーム＋グラフ */
+  .hero-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);overflow:hidden}
+  .hero-card .chart-head{background:var(--ink-2);padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+  .hero-card .chart-head .t{color:#fff;font-weight:800;font-size:14px}
+  .hero-card .chart-head .badge-now{font-size:11px;font-weight:900;color:#fff;background:var(--danger);padding:4px 10px;border-radius:5px;transform:skewX(-8deg);box-shadow:2px 2px 0 rgba(0,0,0,.3)}
+  .chart-box{padding:14px 14px 4px;background:#fff}
+  .chart-box svg text{font-family:var(--font)}
+  .line-draw{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 2s ease forwards}
+  .line-draw.d2{animation-delay:.25s}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:6px 16px 8px;background:#fff}
+  .legend span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#334155}
+  .legend .ldot{width:16px;height:4px;border-radius:2px}
+  .legend .tokyo .ldot{background:#1E3A5F}
+  .legend .tohoku .ldot{background:#9333EA}
+  .legend .grn{color:#059669}.legend .grn .ldot{background:var(--stable);height:0;border-top:3px dashed var(--stable)}
+  .chart-src{padding:0 16px 12px;background:#fff;font-size:9.5px;color:#94A3B8;line-height:1.5}
+
+  .qform{padding:18px 18px 20px}
+  .qform .qtitle{font-weight:900;color:var(--ink);font-size:16px;display:flex;align-items:center;gap:8px}
+  .qform .qsub{font-size:12px;color:var(--text-sub);margin:4px 0 14px}
+  .field{margin-bottom:12px}
+  .field input,.field select{width:100%;min-height:52px;padding:14px 15px;border:1.5px solid var(--line);border-radius:11px;font-size:16px;font-family:inherit;color:var(--text);background:#fff}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,.18)}
+  .qform .btn-cta{width:100%;margin-top:6px}
+  .qform .priv{font-size:10.5px;color:var(--text-sub);text-align:center;margin-top:9px}
+
+  /* ====== セクション共通 ====== */
+  .sec{padding:64px 0}
+  .sec-tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:2px;color:var(--alert)}
+  .sec-h{font-family:var(--font-disp);font-size:clamp(26px,4.6vw,40px);font-weight:900;color:var(--ink);line-height:1.38;margin:10px 0 12px;letter-spacing:-1px}
+  .sec-h .hl{color:var(--danger)}
+  .sec-sub{color:var(--text-sub);font-size:15px;max-width:680px}
+  .center{text-align:center}
+  .center .sec-sub{margin:0 auto}
+
+  /* 現状アラート */
+  .alertsec{background:var(--ink);color:#fff}
+  .alertsec .sec-h{color:#fff}
+  .alertsec .sec-sub{color:#CBD5E1}
+  .alert-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .alert-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:26px 22px}
+  .alert-card .ico{width:54px;height:54px;border-radius:13px;background:rgba(245,158,11,.16);display:grid;place-items:center;color:var(--alert);margin-bottom:14px}
+  .alert-card h3{font-size:17px;font-weight:800;margin-bottom:8px}
+  .alert-card h3 em{font-style:normal;color:#FCD34D}
+  .alert-card p{font-size:13.5px;color:#CBD5E1;line-height:1.8}
+  .alert-note{margin-top:22px;font-size:11px;color:#64748B}
+
+  /* なぜ今（希少性） */
+  .why{background:linear-gradient(180deg,#FFFBEB,#fff)}
+  .why-band{background:#fff;border:1px solid var(--line);border-left:6px solid var(--alert);border-radius:14px;padding:28px 28px;box-shadow:var(--shadow);margin-top:30px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+  .why-band .big{font-family:var(--font-disp);font-size:clamp(54px,10vw,92px);font-weight:900;color:var(--alert);line-height:.92;white-space:nowrap;letter-spacing:-2px}
+  .why-band .big small{display:block;font-size:14px;color:var(--text-sub);font-weight:700;margin-top:10px;font-family:var(--font)}
+  .why-band .txt h3{font-size:19px;font-weight:900;color:var(--ink);margin-bottom:8px}
+  .why-band .txt p{font-size:14px;color:var(--ink-3)}
+  .why-band .txt p b{color:var(--danger)}
+
+  /* 比較表 */
+  .cmp{background:var(--paper-2)}
+  .table-scroll{overflow-x:auto;margin-top:30px;border-radius:var(--radius);box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:collapse;background:#fff;min-width:620px}
+  th,td{padding:16px 14px;text-align:center;font-size:14px;border-bottom:1px solid var(--line)}
+  thead th{background:var(--ink);color:#fff;font-weight:800;font-size:14px}
+  thead th.fp{background:linear-gradient(135deg,#059669,#10B981);position:relative}
+  thead th.fp .crown{display:block;font-size:11px;color:#D1FAE5;font-weight:700}
+  tbody th{background:var(--paper-2);text-align:left;font-weight:800;color:var(--ink);white-space:nowrap}
+  td.fp{background:#ECFDF5;font-weight:800;color:#047857}
+  .mk-o{color:var(--stable);font-weight:900}
+  .mk-x{color:var(--danger);font-weight:900}
+  .mk-t{color:var(--alert);font-weight:900}
+  td .lbl{display:block;font-size:11.5px;color:var(--text-sub);font-weight:500;margin-top:2px}
+  td.fp .lbl{color:#059669}
+
+  /* メリット */
+  .merit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .merit{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;box-shadow:var(--shadow);transition:transform .18s ease}
+  .merit:hover{transform:translateY(-4px)}
+  .merit .ico{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#EFF6FF,#DBEAFE);display:grid;place-items:center;color:#2563EB;margin-bottom:14px}
+  .merit h3{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:8px}
+  .merit p{font-size:13.5px;color:var(--text-sub);line-height:1.8}
+
+  /* 事例 */
+  .case{background:var(--ink-2);color:#fff}
+  .case .sec-h{color:#fff}.case .sec-sub{color:#CBD5E1}
+  .case-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+  .case-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:22px 18px;text-align:center}
+  .case-card .tag{font-size:13px;font-weight:800;color:#fff;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:7px}
+  .case-card .tag .icon{width:20px;height:20px;color:#FCD34D}
+  .case-card .pct{font-family:var(--font-disp);font-size:56px;font-weight:900;color:#34D399;line-height:1;letter-spacing:-1px}
+  .case-card .pct small{font-size:18px}
+  .case-card .pct-lbl{font-size:11px;color:#94A3B8;margin:4px 0 14px}
+  .case-card .yen{font-size:13px;color:#CBD5E1}
+  .case-card .yen b{display:block;font-size:26px;color:#FCD34D;font-weight:800;margin-top:4px}
+  .case-note{font-size:11px;color:#64748B;margin-top:20px;text-align:center}
+
+  /* 声 */
+  .voice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .voice{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow);position:relative}
+  .voice .q{color:var(--alert);opacity:.45;line-height:1}
+  .voice .q .icon{width:34px;height:34px;stroke-width:1.6}
+  .voice h3{font-size:15.5px;font-weight:800;color:var(--ink);margin:6px 0 10px}
+  .voice p{font-size:13.5px;color:var(--ink-3);line-height:1.85}
+  .voice .who{margin-top:14px;font-size:12.5px;color:var(--text-sub);font-weight:700;border-top:1px solid var(--line);padding-top:12px}
+
+  /* 流れ */
+  .flow{background:var(--paper-2)}
+  .flow-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow);position:relative}
+  .step .no{position:absolute;top:-14px;left:24px;background:var(--ink);color:#fff;font-weight:900;font-size:13px;padding:6px 14px;border-radius:999px;letter-spacing:1px}
+  .step h3{font-size:17px;font-weight:800;color:var(--ink);margin:14px 0 8px}
+  .step p{font-size:13.5px;color:var(--text-sub);line-height:1.8}
+
+  /* FAQ */
+  .faq-list{margin-top:30px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+  .faq-item{border-bottom:1px solid var(--line);background:#fff}
+  .faq-item:last-child{border-bottom:none}
+  .faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:20px 22px;font-size:15px;font-weight:800;color:var(--ink);display:flex;align-items:center;gap:12px;font-family:inherit}
+  .faq-q .qm{color:var(--alert);font-weight:900;flex-shrink:0}
+  .faq-q .tg{margin-left:auto;transition:transform .25s ease;color:var(--text-sub);font-size:20px;flex-shrink:0}
+  .faq-item.open .faq-q .tg{transform:rotate(45deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;background:var(--paper-2)}
+  .faq-a p{padding:0 22px 20px 50px;font-size:13.5px;color:var(--ink-3);line-height:1.85}
+
+  /* CTA帯 */
+  .ctaband{background:linear-gradient(135deg,#1E3A5F,#0F172A);color:#fff;text-align:center;padding:60px 0}
+  .ctaband h2{font-family:var(--font-disp);font-size:clamp(28px,4.8vw,44px);font-weight:900;line-height:1.4;letter-spacing:-.5px}
+  .ctaband h2 .mk{color:#FCD34D}
+  .ctaband p{color:#CBD5E1;margin:14px 0 26px;font-size:15px}
+  .ctaband .hero-cta-row{justify-content:center}
+
+  /* 本フォーム */
+  .formsec{background:var(--paper-2)}
+  .form-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-lg);max-width:680px;margin:34px auto 0;padding:36px 34px;border-top:6px solid var(--alert)}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .form-grid .full{grid-column:1/-1}
+  .form-card input,.form-card select{width:100%;min-height:56px;padding:15px 16px;border:1.5px solid var(--line);border-radius:12px;font-size:16px;font-family:inherit;color:var(--text);background:#fff;line-height:1.4;-webkit-appearance:none;appearance:none}
+  .form-card select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748B' d='M6 8 0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+  .form-card input:focus,.form-card select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 3px rgba(56,189,248,.18)}
+  .form-card input::placeholder{color:#9CA3AF}
+  .lbl-req{display:block;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:6px}
+  .lbl-req .req{color:#fff;background:var(--danger);font-size:10px;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle}
+  .lbl-req .opt{color:var(--text-sub);background:var(--line);font-size:10px;padding:2px 7px;border-radius:4px;margin-left:6px;vertical-align:middle}
+  .hp{position:absolute;left:-9999px}
+  .form-card .btn-cta{width:100%;margin-top:20px;padding:20px}
+  .form-card .priv{text-align:center;font-size:11.5px;color:var(--text-sub);margin-top:14px}
+  .form-ok{display:none;text-align:center;padding:30px 10px}
+  .form-ok .ok-ic{width:72px;height:72px;border-radius:50%;background:#ECFDF5;color:var(--stable);display:grid;place-items:center;margin:0 auto}
+  .form-ok .ok-ic .boxicon{width:38px;height:38px;stroke-width:2.4}
+  .form-ok h3{font-size:22px;font-weight:900;color:var(--stable);margin:10px 0}
+  .form-ok p{color:var(--text-sub);font-size:14px}
+  .err{color:var(--danger);font-size:12px;margin-top:4px;display:none}
+  input.invalid,select.invalid{border-color:var(--danger)!important;background:#FEF2F2}
+
+  /* 連絡先 */
+  .contact-info{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .ci{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+  .ci .ic{color:var(--alert)}
+  .ci .ic .boxicon{width:30px;height:30px}
+  .ci .k{font-size:12px;color:var(--text-sub);font-weight:700;margin:8px 0 4px}
+  .ci .v{font-size:14px;font-weight:800;color:var(--ink);word-break:break-all}
+  .ci .v.tel{font-size:24px;color:var(--alert)}
+
+  /* フッター */
+  footer{background:var(--ink);color:#94A3B8;padding:40px 0 90px;text-align:center;font-size:12.5px}
+  footer .logo{justify-content:center;margin-bottom:14px}
+  footer .reg{margin-top:10px;font-size:11.5px;color:#64748B}
+
+  /* スマホ追従CTA */
+  .mobile-bar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:60;background:rgba(15,23,42,.97);backdrop-filter:blur(8px);padding:10px 12px;gap:10px;border-top:1px solid rgba(255,255,255,.1)}
+  .mobile-bar a{flex:1}
+  .mobile-bar .btn{width:100%;padding:14px;font-size:14px}
+  .mobile-bar .btn-tel{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.3)}
+
+  /* ====== レスポンシブ ====== */
+  @media(max-width:920px){
+    .hero .wrap{grid-template-columns:1fr;gap:28px}
+    .hero-card{order:-1;margin-top:6px}
+    .alert-grid,.merit-grid,.voice-grid,.flow-grid{grid-template-columns:1fr}
+    .case-grid{grid-template-columns:1fr 1fr}
+    .contact-info{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){
+    .sec{padding:48px 0}
+    .why-band{grid-template-columns:1fr;text-align:center;gap:14px}
+    .case-grid{grid-template-columns:1fr 1fr}
+    .form-grid{grid-template-columns:1fr}
+    .form-card{padding:26px 20px}
+    .hero{padding:32px 0 44px}
+    .mobile-bar{display:flex}
+    footer{padding-bottom:96px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .draw,.line-draw{stroke-dashoffset:0!important}
+  }
+</style>
+</head>
+<body>
+
+<!-- SVGアイコン定義（絵文字を全廃し、線画アイコンに統一） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 6-8"/><path d="M16 7h5v5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 4v16h16"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></symbol>
+    <symbol id="i-yen" viewBox="0 0 24 24"><path d="M7 4l5 7 5-7"/><path d="M12 11v9"/><path d="M8 14h8"/><path d="M8 17h8"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-hands" viewBox="0 0 24 24"><path d="M3 11l4-2 5 3 5-3 4 2"/><path d="M3 11v4l5 3 4-2 4 2 5-3v-4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-factory" viewBox="0 0 24 24"><path d="M3 21V10l6 4V10l6 4V6h3v15z"/><path d="M3 21h18"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></symbol>
+    <symbol id="i-shop" viewBox="0 0 24 24"><path d="M4 4h16l-1 5H5L4 4z"/><path d="M5 9v11h14V9"/><path d="M9 20v-6h6v6"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 8v8M8 12h8"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6-7-11a7 7 0 0 1 14 0c0 5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-quote" viewBox="0 0 24 24"><path d="M9 7H5v6h4v-2H7a2 2 0 0 1 2-2V7zm10 0h-4v6h4v-2h-2a2 2 0 0 1 2-2V7z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ヘッダー -->
+<header>
+  <div class="wrap hdr">
+    <a href="#" class="logo"><span class="spark"><svg class="boxicon" aria-hidden="true"><use href="#i-bolt"/></svg></span>Fix Power</a>
+    <div class="hdr-actions">
+      <a href="tel:05088954820" class="hdr-tel"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 050-8895-4820<small>平日 10:00〜18:00</small></a>
+      <a href="#form" class="btn btn-cta">無料見積もり</a>
+    </div>
+  </div>
+</header>
+
+<!-- ヒーロー -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="target-pill"><span class="dot"></span><span>新電力／市場連動型プランをご利用中の企業様へ</span></span>
+      <h1>その電気代、<br><span class="mk"><span>市場まかせ</span></span>で<br>大丈夫ですか<span class="bang">？</span></h1>
+      <p class="hero-lead">
+        JEPX卸価格は<b>東京：約12.8円→20.76円/kWh</b>、<b>東北：約10.9円→15.98円/kWh</b>（直近1年・月平均）。<br>
+        市場連動型は、<b>この上昇がそのまま毎月の請求へ</b>。30分ごとに単価が動き、コストが読めません。<br>
+        Fix Powerは<span style="color:#34D399;font-weight:900">固定単価プランを受付中</span>。市場高騰に振り回される毎日から、<b>いま、抜け出しませんか。</b>
+      </p>
+      <div class="badges">
+        <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>シミュレーション最短1分</span>
+        <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>見積もり・導入0円</span>
+        <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>解約違約金0円</span>
+      </div>
+      <div class="hero-cta-row">
+        <a href="#form" class="btn btn-cta">今の電気代を無料診断する <span class="arrow">→</span></a>
+        <a href="tel:05088954820" class="btn btn-ghost"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 電話で相談する</a>
+      </div>
+    </div>
+
+    <!-- 右：市場グラフ＋簡易フォーム -->
+    <div class="hero-card">
+      <div class="chart-head">
+        <span class="t"><svg class="icon" aria-hidden="true"><use href="#i-trend"/></svg> JEPX月平均 約定価格（東京・東北）</span>
+        <span class="badge-now">高騰中</span>
+      </div>
+      <div class="chart-box">
+        <svg viewBox="0 0 400 196" width="100%" role="img" aria-label="JEPXスポット市場 月平均約定価格。東京は2025年6月の約12.8円から2026年6月には20.76円へ、東北は約10.9円から15.98円へ上昇。">
+          <!-- 高騰ゾーン（直近の急騰を強調） -->
+          <rect x="260" y="20" width="138" height="156" fill="#FEF2F2"/>
+          <text x="266" y="32" fill="#DC2626" font-size="9.5" font-weight="900">▲急騰</text>
+          <!-- グリッド＋Y軸ラベル -->
+          <g stroke="#E5E7EB" stroke-width="1">
+            <line x1="34" y1="45.7" x2="398" y2="45.7"/><line x1="34" y1="67.4" x2="398" y2="67.4"/>
+            <line x1="34" y1="89.1" x2="398" y2="89.1"/><line x1="34" y1="110.9" x2="398" y2="110.9"/>
+            <line x1="34" y1="132.6" x2="398" y2="132.6"/><line x1="34" y1="154.3" x2="398" y2="154.3"/>
+          </g>
+          <g fill="#94A3B8" font-size="9" text-anchor="end">
+            <text x="30" y="49">20</text><text x="30" y="70.8">18</text><text x="30" y="92.5">16</text>
+            <text x="30" y="114.3">14</text><text x="30" y="136">12</text><text x="30" y="157.7">10</text>
+          </g>
+          <!-- X軸ラベル -->
+          <g fill="#94A3B8" font-size="8.5" text-anchor="middle">
+            <text x="34" y="190">25/06</text><text x="185" y="190">25/12</text><text x="336" y="190">26/06</text>
+          </g>
+          <!-- 東北（紫） -->
+          <path class="line-draw d2" d="M34,144.5 L59.17,123.9 L84.33,127.1 L109.5,141.3 L134.67,133.7 L159.83,147.8 L185,149.9 L210.17,134.7 L235.33,143.4 L260.5,132.6 L285.67,105.4 L310.83,107.6 L336,89.4"
+                fill="none" stroke="#9333EA" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- 東京（紺） -->
+          <path class="line-draw" d="M34,123.9 L59.17,113 L84.33,120.6 L109.5,123.9 L134.67,121.7 L159.83,135.8 L185,143.4 L210.17,133.7 L235.33,143.4 L260.5,107.6 L285.67,45.7 L310.83,67.4 L336,37.5"
+                fill="none" stroke="#1E3A5F" stroke-width="2.8" stroke-linejoin="round" stroke-linecap="round"/>
+          <!-- 終端マーカー＋値ラベル -->
+          <circle cx="336" cy="37.5" r="3.5" fill="#1E3A5F"/>
+          <g><rect x="300" y="26" width="96" height="17" rx="4" fill="#1E3A5F"/><text x="348" y="38" fill="#fff" font-size="10" font-weight="900" text-anchor="middle">東京 20.76円</text></g>
+          <circle cx="336" cy="89.4" r="3.5" fill="#9333EA"/>
+          <g><rect x="300" y="92" width="96" height="17" rx="4" fill="#9333EA"/><text x="348" y="104" fill="#fff" font-size="10" font-weight="900" text-anchor="middle">東北 15.98円</text></g>
+        </svg>
+      </div>
+      <div class="legend">
+        <span class="tokyo"><span class="ldot"></span>東京エリア</span>
+        <span class="tohoku"><span class="ldot"></span>東北エリア</span>
+      </div>
+      <div class="chart-src">出典：JEPX スポット市場 月平均約定価格（2025/06〜2026/06・東京/東北エリアプライス）。単位：円/kWh。</div>
+
+      <form class="qform" id="heroForm" data-endpoint="REPLACE_WITH_LP_A_ENDPOINT" novalidate>
+        <div class="qtitle"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg> 30秒で無料診断</div>
+        <div class="qsub">かんたん入力。最短1分で削減シミュレーションをお届けします。</div>
+        <input type="text" name="hp_company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="field"><input type="text" name="name" placeholder="お名前" required></div>
+        <div class="field"><input type="tel" name="tel" placeholder="電話番号" required></div>
+        <div class="field"><input type="email" name="email" placeholder="メールアドレス" required></div>
+        <button type="submit" class="btn btn-cta">無料診断を申し込む <span class="arrow">→</span></button>
+        <div class="priv">送信で<a href="#" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなします</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 現状アラート -->
+<section class="sec alertsec">
+  <div class="wrap center">
+    <span class="sec-tag">SITUATION</span>
+    <h2 class="sec-h">市場連動型プラン、<br>その<span class="skew hl-red">“じわじわ負担”</span>に心当たりは？</h2>
+    <p class="sec-sub">電力市場（JEPX）の価格は燃料情勢や需給で大きく動きます。市場連動型は、その変動がそのまま請求に反映されます。</p>
+  </div>
+  <div class="wrap">
+    <div class="alert-grid">
+      <div class="alert-card">
+        <div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-trend"/></svg></div>
+        <h3>請求額が<em>毎月読めない</em></h3>
+        <p>30分ごとの市場価格に連動するため、同じ使い方でも月によって電気代が乱高下。予算が立てにくく、経営計画の不安要素になります。</p>
+      </div>
+      <div class="alert-card">
+        <div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-alert"/></svg></div>
+        <h3>高騰時は<em>上限なし</em>で直撃</h3>
+        <p>市場連動型の多くは上限が設けられておらず、市場が高騰した月はコストがそのまま跳ね上がるリスクを抱えます。</p>
+      </div>
+      <div class="alert-card">
+        <div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-lock"/></svg></div>
+        <h3>固定の<em>受付が狭まっている</em></h3>
+        <p>市場環境を背景に、固定プランの新規受付を停止・制限する動きも。「切り替えたいのに窓口がない」状況が起きています。</p>
+      </div>
+    </div>
+    <p class="alert-note">※ 市場（JEPX）価格は時期により変動します。受付状況は事業者により異なります。記載は一般的な傾向に基づくイメージです。</p>
+  </div>
+</section>
+
+<!-- なぜ今（希少性） -->
+<section class="sec why">
+  <div class="wrap center">
+    <span class="sec-tag">WHY NOW</span>
+    <h2 class="sec-h">“様子見”が、<span class="hl-warn"><span>いちばん高くつく</span></span>かもしれません<span class="hl-red">！？</span></h2>
+    <p class="sec-sub">市場が落ち着くのを待つほど、高騰月のダメージは積み上がります。固定に切り替えられる「今」が動きどきです。</p>
+  </div>
+  <div class="wrap">
+    <div class="why-band">
+      <div class="big">0<small>切り替え・違約金</small></div>
+      <div class="txt">
+        <h3>受付中の“いま”が、固定への乗り換えチャンス</h3>
+        <p>Fix Powerは導入・見積もり・切り替えにかかる費用が原則<b>0円</b>。さらに解約違約金も<b>0円</b>だから、まずは現状の電気代と比べるだけでもメリットがあります。<b>動かないリスク</b>のほうが大きい局面です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 比較表 -->
+<section class="sec cmp">
+  <div class="wrap center">
+    <span class="sec-tag">COMPARE</span>
+    <h2 class="sec-h">市場連動型 と Fix Power、<br>どちらが<span class="skew" style="color:var(--stable)">“読める電気代”</span>ですか？</h2>
+    <p class="sec-sub">透明性と予測のしやすさで比較しました。</p>
+  </div>
+  <div class="wrap">
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>市場連動型プラン</th>
+            <th>他社固定プラン</th>
+            <th class="fp">Fix Power<span class="crown"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> おすすめ</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>毎月の単価</th>
+            <td><span class="mk-x">×</span><span class="lbl">月ごとに変動・予測困難</span></td>
+            <td><span class="mk-o">〇</span><span class="lbl">契約期間中は一定</span></td>
+            <td class="fp"><span class="mk-o">〇</span><span class="lbl">契約期間中は一定</span></td>
+          </tr>
+          <tr>
+            <th>高騰リスク</th>
+            <td><span class="mk-x">×</span><span class="lbl">上限なし・市場高騰を直撃</span></td>
+            <td><span class="mk-t">△</span><span class="lbl">独自調整額で高騰の余地</span></td>
+            <td class="fp"><span class="mk-o">〇</span><span class="lbl">高騰リスクを最小限に</span></td>
+          </tr>
+          <tr>
+            <th>燃料調整額</th>
+            <td><span class="mk-o">〇</span><span class="lbl">なし（だが市場変動が直撃）</span></td>
+            <td><span class="mk-x">×</span><span class="lbl">独自の上乗せが入る場合も</span></td>
+            <td class="fp"><span class="mk-o">〇</span><span class="lbl">地域電力と同水準・上乗せなし</span></td>
+          </tr>
+          <tr>
+            <th>予算・収支予測</th>
+            <td><span class="mk-x">×</span><span class="lbl">請求までコストが確定しない</span></td>
+            <td><span class="mk-t">△</span><span class="lbl">調整額の予測が難しい</span></td>
+            <td class="fp"><span class="mk-o">〇</span><span class="lbl">明確な年間予算が立てやすい</span></td>
+          </tr>
+          <tr>
+            <th>経営の手間・ストレス</th>
+            <td><span class="mk-x">×</span><span class="lbl">市場監視が常時ストレスに</span></td>
+            <td><span class="mk-t">△</span><span class="lbl">予算管理の手間が発生</span></td>
+            <td class="fp"><span class="mk-o">〇</span><span class="lbl">放っておいても安定</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="center" style="margin-top:28px">
+      <a href="#form" class="btn btn-cta">うちはどれくらい変わる？無料で診断 <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- メリット -->
+<section class="sec">
+  <div class="wrap center">
+    <span class="sec-tag">BENEFIT</span>
+    <h2 class="sec-h">固定に切り替えると、<br>こう変わります</h2>
+  </div>
+  <div class="wrap">
+    <div class="merit-grid">
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-chart"/></svg></div><h3>請求が“読める”ようになる</h3><p>毎月の単価が一定だから、市場を気にせず年間予算をそのまま計画化。経営のノイズが減ります。</p></div>
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-yen"/></svg></div><h3>導入コストはいつでも0円</h3><p>見積もり・切り替え・導入にかかる費用は原則0円。まずは現状比較だけでも大丈夫です。</p></div>
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-bolt"/></svg></div><h3>電気の品質はそのまま</h3><p>地域電力会社の送電設備をそのまま利用。電気の品質・停電時の対応も従来と変わりません。</p></div>
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-search"/></svg></div><h3>料金内訳がクリア</h3><p>不透明な独自調整額を排除。何にいくらかかっているのか一目で分かる料金設計です。</p></div>
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-hands"/></svg></div><h3>切り替えも運用も丸ごと代行</h3><p>面倒な手続きは当社が代行。工事の立ち会いも基本不要で、手間は最小限です。</p></div>
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-shield"/></svg></div><h3>高騰リスクは当社が吸収</h3><p>市場価格が上がっても請求単価は固定。リスクを当社側で引き受ける設計です。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 事例 -->
+<section class="sec case">
+  <div class="wrap center">
+    <span class="sec-tag">CASE STUDY</span>
+    <h2 class="sec-h">市場連動からの乗り換えで、<br>こんな削減が出ています</h2>
+    <p class="sec-sub">様々な業種で、確かなコスト削減の実績があります。</p>
+  </div>
+  <div class="wrap">
+    <div class="case-grid">
+      <div class="case-card"><div class="tag"><svg class="icon" aria-hidden="true"><use href="#i-factory"/></svg>工場（製造業）</div><div class="pct">18<small>%</small></div><div class="pct-lbl">電気代削減</div><div class="yen">年間削減額<b>約 320万円</b></div></div>
+      <div class="case-card"><div class="tag"><svg class="icon" aria-hidden="true"><use href="#i-building"/></svg>オフィスビル</div><div class="pct">15<small>%</small></div><div class="pct-lbl">電気代削減</div><div class="yen">年間削減額<b>約 145万円</b></div></div>
+      <div class="case-card"><div class="tag"><svg class="icon" aria-hidden="true"><use href="#i-shop"/></svg>商業施設</div><div class="pct">20<small>%</small></div><div class="pct-lbl">電気代削減</div><div class="yen">年間削減額<b>約 280万円</b></div></div>
+      <div class="case-card"><div class="tag"><svg class="icon" aria-hidden="true"><use href="#i-cross"/></svg>医療施設</div><div class="pct">17<small>%</small></div><div class="pct-lbl">電気代削減</div><div class="yen">年間削減額<b>約 190万円</b></div></div>
+    </div>
+    <p class="case-note">※ 削減率・削減額は契約条件や使用状況により異なります。上記は試算に基づく例示です。</p>
+  </div>
+</section>
+
+<!-- 声 -->
+<section class="sec">
+  <div class="wrap center">
+    <span class="sec-tag">VOICE</span>
+    <h2 class="sec-h">市場連動から切り替えた<br>お客様の声</h2>
+  </div>
+  <div class="wrap">
+    <div class="voice-grid">
+      <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>予算編成が格段に楽に</h3><p>市場連動型で毎月の変動が激しく予算管理に苦労していました。月々の電気代が読みやすくなり、経営計画も立てやすくなりました。</p><div class="who">製造業・総務部長</div></div>
+      <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>内訳が見えるのが決め手</h3><p>切り替えに躊躇していましたが、何にいくらかかるか一目瞭然。シミュレーションも丁寧でサポートも手厚く、安心して任せられました。</p><div class="who">商業施設・責任者</div></div>
+      <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>高騰リスクから解放</h3><p>電気代の高騰リスクから解放され、本業に集中できるようになりました。安定して削減できたのが何よりです。</p><div class="who">医療法人・事務長</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 流れ -->
+<section class="sec flow">
+  <div class="wrap center">
+    <span class="sec-tag">FLOW</span>
+    <h2 class="sec-h">切り替えは、たった3ステップ</h2>
+    <p class="sec-sub">手間は最小限。お客様の負担を抑えて切り替えまで完全サポートします。</p>
+  </div>
+  <div class="wrap">
+    <div class="flow-grid">
+      <div class="step"><span class="no">STEP 01</span><h3>お問い合わせ</h3><p>Webフォームまたはお電話でご連絡ください。検針票をご用意いただくとよりスムーズです。</p></div>
+      <div class="step"><span class="no">STEP 02</span><h3>お見積り・ご提案</h3><p>現在の使用状況を分析し、削減効果をシミュレーションしたプランをご提示します。</p></div>
+      <div class="step"><span class="no">STEP 03</span><h3>電力切り替え</h3><p>お申し込み後は当社が手続きを代行。工事の立ち会いも基本不要。最短1か月で完了します。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec">
+  <div class="wrap center">
+    <span class="sec-tag">FAQ</span>
+    <h2 class="sec-h">よくあるご質問</h2>
+  </div>
+  <div class="wrap" style="max-width:820px">
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>市場連動型から切り替えると、本当に安くなりますか？<span class="tg">＋</span></button><div class="faq-a"><p>使用状況によりますが、高騰月の影響を受けやすい市場連動型から固定へ移ることで、年間を通したコストの安定と削減が見込めるケースが多くあります。まずは無料シミュレーションで現状と比較してください。</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>切り替えに費用はかかりますか？<span class="tg">＋</span></button><div class="faq-a"><p>事務手数料や工事費用などのお客様負担は原則発生しません（大規模な設備変更等の特殊なケースを除く）。見積もりも無料です。</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>電気の品質は変わりますか？<span class="tg">＋</span></button><div class="faq-a"><p>変わりません。現在と同じ送電設備を使用するため、品質・安定性はこれまで通りです。停電時の対応も従来同様、送配電事業者が行います。</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>見積もりはどれくらいでできますか？<span class="tg">＋</span></button><div class="faq-a"><p>直近12ヶ月分の検針票をいただければ、通常3〜5営業日程度でシミュレーションを作成しご提案します。</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>市場が高騰しても請求は上がりませんか？<span class="tg">＋</span></button><div class="faq-a"><p>Fix Powerの固定プランなら、市場価格が高騰してもお客様への請求単価は変わりません。リスクは当社が吸収する設計です。</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>どのような施設が対象ですか？<span class="tg">＋</span></button><div class="faq-a"><p>高圧電力をご利用の工場、オフィスビル、商業施設、医療・福祉施設、学校などが対象です。詳細はお気軽にお問い合わせください。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA帯 -->
+<section class="ctaband">
+  <div class="wrap">
+    <h2>市場まかせの電気代から、<br><span class="hl-warn"><span>読める電気代</span></span>へ。</h2>
+    <p>無料シミュレーションは最短1分。今の請求と比べるだけでも価値があります。</p>
+    <div class="hero-cta-row">
+      <a href="#form" class="btn btn-cta">無料で電気代を診断する <span class="arrow">→</span></a>
+      <a href="tel:05088954820" class="btn btn-ghost"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 050-8895-4820</a>
+    </div>
+  </div>
+</section>
+
+<!-- 本フォーム -->
+<section class="sec formsec" id="form">
+  <div class="wrap center">
+    <span class="sec-tag">CONTACT</span>
+    <h2 class="sec-h">無料見積もり・診断のお申し込み</h2>
+    <p class="sec-sub">必要事項をご入力ください。検針票があるとよりスムーズです。</p>
+  </div>
+  <div class="wrap">
+    <div class="form-card">
+      <form id="leadForm" data-endpoint="REPLACE_WITH_LP_A_ENDPOINT" novalidate>
+        <input type="text" name="hp_company" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="form-grid">
+          <div class="full"><label class="lbl-req">お名前<span class="req">必須</span></label><input type="text" name="name" required><div class="err">お名前をご入力ください</div></div>
+          <div><label class="lbl-req">会社名<span class="req">必須</span></label><input type="text" name="company" required><div class="err">会社名をご入力ください</div></div>
+          <div><label class="lbl-req">電話番号<span class="req">必須</span></label><input type="tel" name="tel" required><div class="err">電話番号をご入力ください</div></div>
+          <div class="full"><label class="lbl-req">メールアドレス<span class="req">必須</span></label><input type="email" name="email" required><div class="err">正しいメールアドレスをご入力ください</div></div>
+          <div><label class="lbl-req">都道府県<span class="req">必須</span></label>
+            <select name="pref" required>
+              <option value="">選択してください</option>
+              <option>北海道</option><option>青森県</option><option>岩手県</option><option>宮城県</option><option>秋田県</option><option>山形県</option><option>福島県</option><option>茨城県</option><option>栃木県</option><option>群馬県</option><option>埼玉県</option><option>千葉県</option><option>東京都</option><option>神奈川県</option><option>新潟県</option><option>富山県</option><option>石川県</option><option>福井県</option><option>山梨県</option><option>長野県</option><option>岐阜県</option><option>静岡県</option><option>愛知県</option><option>三重県</option><option>滋賀県</option><option>京都府</option><option>大阪府</option><option>兵庫県</option><option>奈良県</option><option>和歌山県</option><option>鳥取県</option><option>島根県</option><option>岡山県</option><option>広島県</option><option>山口県</option><option>徳島県</option><option>香川県</option><option>愛媛県</option><option>高知県</option><option>福岡県</option><option>佐賀県</option><option>長崎県</option><option>熊本県</option><option>大分県</option><option>宮崎県</option><option>鹿児島県</option><option>沖縄県</option>
+            </select><div class="err">都道府県を選択してください</div></div>
+          <div><label class="lbl-req">市区町村<span class="req">必須</span></label><input type="text" name="city" required><div class="err">市区町村をご入力ください</div></div>
+          <div class="full"><label class="lbl-req">ご質問・ひとこと<span class="opt">任意</span></label><input type="text" name="message"></div>
+        </div>
+        <button type="submit" class="btn btn-cta">この内容で無料見積もりを依頼する <span class="arrow">→</span></button>
+        <div class="priv">送信で<a href="#" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなします</div>
+      </form>
+      <div class="form-ok" id="formOk">
+        <div class="ok-ic"><svg class="boxicon" aria-hidden="true"><use href="#i-check"/></svg></div>
+        <h3>送信ありがとうございました</h3>
+        <p>担当者より折り返しご連絡いたします。<br>お急ぎの場合は 050-8895-4820 までお電話ください。</p>
+      </div>
+    </div>
+
+    <div class="contact-info">
+      <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-pin"/></svg></div><div class="k">所在地</div><div class="v">〒171-0014<br>東京都豊島区池袋2丁目57−6</div></div>
+      <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-phone"/></svg></div><div class="k">お電話（平日10:00〜18:00）</div><div class="v tel"><a href="tel:05088954820">050-8895-4820</a></div></div>
+      <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-mail"/></svg></div><div class="k">メール</div><div class="v">support@fixpower.co.jp</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- フッター -->
+<footer>
+  <div class="wrap">
+    <a href="#" class="logo"><span class="spark"><svg class="boxicon" aria-hidden="true"><use href="#i-bolt"/></svg></span>Fix Power</a>
+    <div>株式会社フィックスパワー</div>
+    <div class="reg">電力小売事業者登録番号 A0522</div>
+    <div class="reg" style="margin-top:14px">© Fix Power. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- スマホ追従CTA -->
+<div class="mobile-bar">
+  <a href="tel:05088954820" class="btn btn-tel"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 電話</a>
+  <a href="#form" class="btn btn-cta">無料診断 →</a>
+</div>
+
+<script>
+  // FAQアコーディオン
+  document.querySelectorAll('.faq-q').forEach(function(q){
+    q.addEventListener('click',function(){
+      var item=q.closest('.faq-item');
+      var a=item.querySelector('.faq-a');
+      var open=item.classList.toggle('open');
+      a.style.maxHeight=open?a.scrollHeight+'px':null;
+    });
+  });
+
+  // フォーム送信（バリデーション＋送信）
+  function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);}
+
+  function handleForm(form, onSuccess){
+    form.addEventListener('submit',function(e){
+      e.preventDefault();
+      // ハニーポット（bot対策）
+      if(form.querySelector('[name="hp_company"]').value){return;}
+      var ok=true;
+      form.querySelectorAll('[required]').forEach(function(el){
+        var bad=!el.value.trim() || (el.type==='email' && !validEmail(el.value));
+        el.classList.toggle('invalid',bad);
+        var err=el.parentElement.querySelector('.err');
+        if(err) err.style.display=bad?'block':'none';
+        if(bad) ok=false;
+      });
+      if(!ok){
+        var first=form.querySelector('.invalid');
+        if(first) first.focus();
+        return;
+      }
+      var btn=form.querySelector('button[type="submit"]');
+      btn.disabled=true; btn.style.opacity=.6; btn.textContent='送信中…';
+
+      var endpoint=form.getAttribute('data-endpoint');
+      var data=Object.fromEntries(new FormData(form).entries());
+      data.lp_variant='B_新電力強化版'; // ★A/B計測用フラグ
+
+      function done(success){
+        if(success){ onSuccess(); }
+        else{
+          btn.disabled=false; btn.style.opacity=1;
+          alert('送信に失敗しました。お手数ですがお電話（050-8895-4820）でご連絡ください。');
+        }
+      }
+
+      // 本番：LP-Aと同じエンドポイントに差し替え
+      if(endpoint && endpoint.indexOf('REPLACE')===-1){
+        fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+          .then(function(r){done(r.ok);}).catch(function(){done(false);});
+      }else{
+        // デモ動作（エンドポイント未設定時）
+        setTimeout(function(){done(true);},700);
+      }
+    });
+  }
+
+  handleForm(document.getElementById('heroForm'),function(){
+    document.getElementById('form').scrollIntoView({behavior:'smooth'});
+    setTimeout(function(){
+      document.getElementById('leadForm').style.display='none';
+      document.getElementById('formOk').style.display='block';
+    },400);
+  });
+  handleForm(document.getElementById('leadForm'),function(){
+    document.getElementById('leadForm').style.display='none';
+    document.getElementById('formOk').style.display='block';
+    document.getElementById('formOk').scrollIntoView({behavior:'smooth',block:'center'});
+  });
+</script>
+</body>
+</html>
