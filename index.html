@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fix Power｜市場連動型プランからの脱出。高圧電力の固定料金プラン</title>
-<meta name="description" content="新電力の市場連動型プランで電気代が高騰していませんか？大手が固定プラン受付を絞る今、Fix Powerなら固定単価で受付中。最短1分の無料シミュレーション、違約金0円。">
+<meta name="description" content="新電力の市場連動型プランで電気代が高騰していませんか？大手が固定プラン受付を絞る今、Fix Powerなら固定単価で受付中。最短1分の無料シミュレーション。切り替えのご相談を受付中。">
 <meta name="theme-color" content="#0F172A">
 <meta property="og:title" content="Fix Power｜市場連動型プランからの脱出">
 <meta property="og:description" content="市場高騰に振り回されない。固定単価プランへ今すぐ切り替え。">
@@ -297,6 +297,31 @@
     *{animation:none!important;transition:none!important}
     .draw,.line-draw{stroke-dashoffset:0!important}
   }
+
+  /* ===== プライバシーポリシー（オーバーレイ別ページ） ===== */
+  .pp-overlay{display:none;position:fixed;inset:0;z-index:200;background:#fff;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .pp-overlay.open{display:block}
+  body.pp-lock{overflow:hidden}
+  .pp-head{position:sticky;top:0;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:16px 20px;z-index:2}
+  .pp-head .pp-title{font-family:var(--font-disp);font-weight:900;font-size:clamp(18px,3vw,24px);letter-spacing:-.5px}
+  .pp-close{background:#fff;color:var(--ink);border:none;border-radius:8px;font-weight:900;font-size:14px;padding:10px 18px;cursor:pointer;font-family:inherit}
+  .pp-close:hover{background:#FACC15}
+  .pp-body{max-width:860px;margin:0 auto;padding:32px 22px 80px;color:#334155;font-size:14px;line-height:1.9}
+  .pp-body .pp-lead{color:#475569;font-size:13.5px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:26px}
+  .pp-body h3{font-family:var(--font-disp);font-size:17px;font-weight:900;color:var(--ink);margin:34px 0 12px;padding-left:12px;border-left:5px solid var(--alert);line-height:1.4}
+  .pp-body h4{font-size:14px;font-weight:900;color:var(--ink);margin:20px 0 8px}
+  .pp-body p{margin:0 0 12px}
+  .pp-body ol,.pp-body ul{margin:0 0 14px;padding-left:1.4em}
+  .pp-body li{margin:0 0 6px}
+  .pp-body .pp-note{font-size:12px;color:#64748B;line-height:1.8;margin:4px 0}
+  .pp-body .pp-box{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:0 0 14px}
+  .pp-body a{color:#2563EB;text-decoration:underline;word-break:break-all}
+  .pp-body .pp-contact{background:#EAF2FE;border-radius:12px;padding:18px 20px;margin-top:10px}
+  .pp-body .pp-contact b{color:var(--ink)}
+  .pp-updated{color:#94A3B8;font-size:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:16px}
+  footer .footlinks{margin-top:16px;font-size:12.5px}
+  footer .footlinks a{color:#CBD5E1;text-decoration:underline;cursor:pointer}
+  footer .footlinks a:hover{color:#fff}
 </style>
 </head>
 <body>
@@ -350,7 +375,7 @@
       <div class="badges">
         <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>シミュレーション最短1分</span>
         <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>見積もり・導入0円</span>
-        <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>解約違約金0円</span>
+        <span class="badge"><span class="ic"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>切り替え相談受付中</span>
       </div>
       <div class="hero-cta-row">
         <a href="#form" class="btn btn-cta">今の電気代を無料診断する <span class="arrow">→</span></a>
@@ -410,7 +435,7 @@
         <div class="field"><input type="tel" name="tel" placeholder="電話番号" required></div>
         <div class="field"><input type="email" name="email" placeholder="メールアドレス" required></div>
         <button type="submit" class="btn btn-cta">無料診断を申し込む <span class="arrow">→</span></button>
-        <div class="priv">送信で<a href="#" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなします</div>
+        <div class="priv">送信で<a href="#privacy" class="js-privacy" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなします</div>
       </form>
     </div>
   </div>
@@ -454,10 +479,10 @@
   </div>
   <div class="wrap">
     <div class="why-band">
-      <div class="big">0<small>切り替え・違約金</small></div>
+      <div class="big">0<small>切り替え・導入費用</small></div>
       <div class="txt">
         <h3>受付中の“いま”が、固定への乗り換えチャンス</h3>
-        <p>Fix Powerは導入・見積もり・切り替えにかかる費用が原則<b>0円</b>。さらに解約違約金も<b>0円</b>だから、まずは現状の電気代と比べるだけでもメリットがあります。<b>動かないリスク</b>のほうが大きい局面です。</p>
+        <p>Fix Powerは導入・見積もり・切り替えにかかる費用が原則<b>0円</b>。まずは現状の電気代と比べるだけでもメリットがあります。<b>動かないリスク</b>のほうが大きい局面です。</p>
       </div>
     </div>
   </div>
@@ -534,7 +559,7 @@
       <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-bolt"/></svg></div><h3>電気の品質はそのまま</h3><p>地域電力会社の送電設備をそのまま利用。電気の品質・停電時の対応も従来と変わりません。</p></div>
       <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-search"/></svg></div><h3>料金内訳がクリア</h3><p>不透明な独自調整額を排除。何にいくらかかっているのか一目で分かる料金設計です。</p></div>
       <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-hands"/></svg></div><h3>切り替えも運用も丸ごと代行</h3><p>面倒な手続きは当社が代行。工事の立ち会いも基本不要で、手間は最小限です。</p></div>
-      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-shield"/></svg></div><h3>高騰リスクは当社が吸収</h3><p>市場価格が上がっても請求単価は固定。リスクを当社側で引き受ける設計です。</p></div>
+      <div class="merit"><div class="ico"><svg class="boxicon" aria-hidden="true"><use href="#i-shield"/></svg></div><h3>高騰リスクを抑えやすい料金設計</h3><p>市場価格の変動を受けにくく、電気料金の急な上振れリスクを抑えやすい設計です。</p></div>
     </div>
   </div>
 </section>
@@ -543,7 +568,7 @@
 <section class="sec case">
   <div class="wrap center">
     <span class="sec-tag">CASE STUDY</span>
-    <h2 class="sec-h">市場連動からの乗り換えで、<br>こんな削減が出ています</h2>
+    <h2 class="sec-h">大手電力会社からの乗り換えで、<br>こんな削減が出ています</h2>
     <p class="sec-sub">様々な業種で、確かなコスト削減の実績があります。</p>
   </div>
   <div class="wrap">
@@ -561,11 +586,11 @@
 <section class="sec">
   <div class="wrap center">
     <span class="sec-tag">VOICE</span>
-    <h2 class="sec-h">市場連動から切り替えた<br>お客様の声</h2>
+    <h2 class="sec-h">大手電力から切り替えた<br>お客様の声</h2>
   </div>
   <div class="wrap">
     <div class="voice-grid">
-      <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>予算編成が格段に楽に</h3><p>市場連動型で毎月の変動が激しく予算管理に苦労していました。月々の電気代が読みやすくなり、経営計画も立てやすくなりました。</p><div class="who">製造業・総務部長</div></div>
+      <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>予算編成が格段に楽に</h3><p>従来は電気代が高止まりし、予算管理に苦労していました。月々のコストが読みやすくなり、経営計画も立てやすくなりました。</p><div class="who">製造業・総務部長</div></div>
       <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>内訳が見えるのが決め手</h3><p>切り替えに躊躇していましたが、何にいくらかかるか一目瞭然。シミュレーションも丁寧でサポートも手厚く、安心して任せられました。</p><div class="who">商業施設・責任者</div></div>
       <div class="voice"><div class="q"><svg class="icon" aria-hidden="true"><use href="#i-quote"/></svg></div><h3>高騰リスクから解放</h3><p>電気代の高騰リスクから解放され、本業に集中できるようになりました。安定して削減できたのが何よりです。</p><div class="who">医療法人・事務長</div></div>
     </div>
@@ -600,7 +625,7 @@
       <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>切り替えに費用はかかりますか？<span class="tg">＋</span></button><div class="faq-a"><p>事務手数料や工事費用などのお客様負担は原則発生しません（大規模な設備変更等の特殊なケースを除く）。見積もりも無料です。</p></div></div>
       <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>電気の品質は変わりますか？<span class="tg">＋</span></button><div class="faq-a"><p>変わりません。現在と同じ送電設備を使用するため、品質・安定性はこれまで通りです。停電時の対応も従来同様、送配電事業者が行います。</p></div></div>
       <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>見積もりはどれくらいでできますか？<span class="tg">＋</span></button><div class="faq-a"><p>直近12ヶ月分の検針票をいただければ、通常3〜5営業日程度でシミュレーションを作成しご提案します。</p></div></div>
-      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>市場が高騰しても請求は上がりませんか？<span class="tg">＋</span></button><div class="faq-a"><p>Fix Powerの固定プランなら、市場価格が高騰してもお客様への請求単価は変わりません。リスクは当社が吸収する設計です。</p></div></div>
+      <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>市場が高騰しても請求は上がりませんか？<span class="tg">＋</span></button><div class="faq-a"><p>市場連動型と比べて、市場価格の影響を受けにくく、料金の急な上振れを抑えやすい設計です。電気料金の見通しを立てやすく、安心して運用いただけます。</p></div></div>
       <div class="faq-item"><button class="faq-q"><span class="qm">Q</span>どのような施設が対象ですか？<span class="tg">＋</span></button><div class="faq-a"><p>高圧電力をご利用の工場、オフィスビル、商業施設、医療・福祉施設、学校などが対象です。詳細はお気軽にお問い合わせください。</p></div></div>
     </div>
   </div>
@@ -643,7 +668,7 @@
           <div class="full"><label class="lbl-req">ご質問・ひとこと<span class="opt">任意</span></label><input type="text" name="message"></div>
         </div>
         <button type="submit" class="btn btn-cta">この内容で無料見積もりを依頼する <span class="arrow">→</span></button>
-        <div class="priv">送信で<a href="#" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなします</div>
+        <div class="priv">送信で<a href="#privacy" class="js-privacy" style="text-decoration:underline">プライバシーポリシー</a>に同意したものとみなします</div>
       </form>
       <div class="form-ok" id="formOk">
         <div class="ok-ic"><svg class="boxicon" aria-hidden="true"><use href="#i-check"/></svg></div>
@@ -653,7 +678,7 @@
     </div>
 
     <div class="contact-info">
-      <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-pin"/></svg></div><div class="k">所在地</div><div class="v">〒171-0014<br>東京都豊島区池袋2丁目57−6</div></div>
+      <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-pin"/></svg></div><div class="k">所在地</div><div class="v">東京都豊島区東池袋<br>二丁目60番2号</div></div>
       <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-phone"/></svg></div><div class="k">お電話（平日10:00〜18:00）</div><div class="v tel"><a href="tel:05088954820">050-8895-4820</a></div></div>
       <div class="ci"><div class="ic"><svg class="boxicon" aria-hidden="true"><use href="#i-mail"/></svg></div><div class="k">メール</div><div class="v">support@fixpower.co.jp</div></div>
     </div>
@@ -666,6 +691,7 @@
     <a href="#" class="logo"><span class="spark"><svg class="boxicon" aria-hidden="true"><use href="#i-bolt"/></svg></span>Fix Power</a>
     <div>株式会社フィックスパワー</div>
     <div class="reg">電力小売事業者登録番号 A0522</div>
+    <div class="footlinks"><a href="#privacy" class="js-privacy">プライバシーポリシー</a></div>
     <div class="reg" style="margin-top:14px">© Fix Power. All rights reserved.</div>
   </div>
 </footer>
@@ -675,6 +701,255 @@
   <a href="tel:05088954820" class="btn btn-tel"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 電話</a>
   <a href="#form" class="btn btn-cta">無料診断 →</a>
 </div>
+
+<!-- ===== プライバシーポリシー（同一HTML内・別ページ） ===== -->
+<div id="privacy" class="pp-overlay" role="dialog" aria-modal="true" aria-label="プライバシーポリシー">
+  <div class="pp-head">
+    <span class="pp-title">プライバシーポリシー</span>
+    <button type="button" class="pp-close js-privacy-close">✕ 閉じる</button>
+  </div>
+  <div class="pp-body">
+    <div class="pp-lead">
+      <p>株式会社フィックスパワー（以下「当社」といいます）では、電力供給・ガス供給サービスの販売などの業務において、個人情報を取り扱っております。そこで当社では、このプライバシーポリシー（以下「本方針」といいます）に基づき、個人情報保護マネジメントシステムを確立するとともに実行し、事業活動にかかわるすべての従業員が一体となって、個人情報の適切な取扱いを実現いたします。</p>
+      <p style="margin:0">また、お客さま及び当社の事業活動に関わるすべての方々（取引先様、株主様、役職員等を含み、以下総称して「ご本人様」といいます）の個人情報が、個人の権利利益と密接に関わるものであり、個人の人格尊重（プライバシー保護）の理念の下に適正かつ慎重に取り扱われるべきものであるという認識に基づき、個人情報の保護に関する法律（以下「個人情報保護法」といいます）等の関係法令を遵守するとともに、個人情報の取扱いに際して以下の事項を誓約させていただきます。</p>
+    </div>
+
+    <h3>Ⅰ. 個人情報の保護について</h3>
+    <ol>
+      <li>個人情報保護法、同法についてのガイドライン、その他の関係法令・規範・国が定める指針等を遵守するとともに、一般に公正妥当と認められる個人情報の取扱いに関する慣行に準拠し、適切に取り扱います。また、継続的に取扱いの改善に努めます。</li>
+      <li>個人情報の取扱いに関する規程を明確にし、役職員等の当社業務従事者に周知徹底します。また、当社の業務委託先に対しても適切に個人情報を取り扱うように要請いたします。</li>
+      <li>個人情報の取得、利用及び提供に際しては、利用目的を特定して通知もしくは公表し、または同意を得た上で、その利用目的の達成に必要な範囲を超えた利用を行わないよう個人情報を取り扱います。個人情報を取り扱うにあたっては、原則として利用目的に必要な範囲内で適切に管理いたします。</li>
+      <li>個人情報への不正アクセス、個人情報の漏洩、破壊、紛失、改ざん等を防止及び是正するため、必要な対策を講じて適切な安全管理を行うとともに、継続的な改善に努めます。</li>
+      <li>保有する個人情報について、ご本人様からの開示、訂正、削除、利用停止の依頼を所定の窓口でお受けして、誠意をもって対応いたします。また、個人情報についてのご本人様からの苦情または相談についても、専用の窓口を設け誠意をもって対応いたします。</li>
+    </ol>
+
+    <h3>Ⅱ. 利用の目的と範囲について</h3>
+    <p>当社は、個人情報等を、以下に記載する目的の範囲内で利用いたします。また、当社は、業務を円滑に進めるため、業務の一部を委託し、業務委託先に対して必要な範囲内で個人情報等を提供することがございますが、この場合、当社は当該委託先との間で個人情報等の取扱いに関する契約を締結し、適切な監督を実施いたします。</p>
+    <ol>
+      <li>商品・サービス（以下「商品等」といいます）、アフターサービスの提供</li>
+      <li>商品等の品質改善</li>
+      <li>各種料金その他の請求収納、債権・与信管理及び保全</li>
+      <li>新商品等の検討、開発</li>
+      <li>商品等に関する情報のご案内</li>
+      <li>営業・勧誘方法の研修・適正化のための従業員教育</li>
+      <li>市場調査その他の調査研究</li>
+      <li>懸賞、キャンペーン及びアンケート等の企画及び実施</li>
+      <li>商品等の広告・宣伝（取引実績のPR等の案内を含みます）</li>
+      <li>経営分析のための統計数値作成及び分析結果の利用</li>
+      <li>個人情報保護法に基づく開示請求等への対応、並びに個人情報の取扱いに関する監視及び監査</li>
+      <li>各種審査及び調査（契約または法令違反、不当、不正もしくは不適正な契約または手続き等その他これらに類する行為または事象の調査等を含みます）</li>
+      <li>各種契約の管理</li>
+      <li>株式に関する事務及び管理</li>
+      <li>法令に基づく権利義務の行使・履行</li>
+      <li>従業員等の雇用（再雇用を含みます。以下同じ）、人事管理及び福利厚生等の管理</li>
+      <li>お問い合わせ対応及びご本人様への連絡</li>
+      <li>本方針の規定による共同利用及び第三者提供</li>
+      <li>その他、前各号に係る業務の遂行上必要とする利用目的</li>
+    </ol>
+
+    <h3>Ⅲ－1. グループ会社間における共同利用について</h3>
+    <p>当社は、個人情報等を以下の範囲内で共同利用いたします。</p>
+    <h4>1. 共同利用する情報の項目</h4>
+    <p>ご本人様の氏名（名称）、住所、生年月日、各種電話番号、メールアドレス、担当者氏名、その他ご本人様に関して当社が取得した情報／当社との取引内容及び取引状況に関する情報（商品等の購入・利用・支払・解約の履歴、供給地点特定番号、商品等の提供日または提供予定日・解約日または廃止日・解約予定日または廃止予定日その他の取引上当社が知り得た情報を含みます）／決済に関する情報（金融機関情報、クレジットカード等の決済及び利用状況、その他の決済及びその方法等の情報）</p>
+    <h4>2. 共同利用者の範囲</h4>
+    <p>当社の親会社、子会社、関連会社並びに当社の親会社の子会社、関連会社並びにそれらのパートナー会社を共同利用者の範囲とします。なお、共同利用者では以下の事業を運営しております。</p>
+    <ul>
+      <li>電気の供給・販売事業</li><li>ガスの供給・販売事業</li><li>電気通信事業</li>
+      <li>保険事業（保険代理店運営を含みます）</li><li>金融事業（貸金・リース・割賦等）</li>
+      <li>宅配水事業</li><li>収納代行・決済事業</li><li>人材事業（求人・人材派遣等）</li>
+      <li>事業企画・アライアンス事業</li><li>オフィス機器及び電子機器等その他の物品の販売または各種役務提供事業</li>
+      <li>コンテンツ企画・開発・運営事業</li><li>システム開発・運用事業</li>
+      <li>各種情報提供・連携等の情報プラットホーム事業</li><li>予約事業</li><li>酒類販売事業</li>
+      <li>福利厚生事業</li><li>その他前各号に付帯または関連する事業</li>
+    </ul>
+    <h4>3. 共同利用者の利用目的</h4>
+    <p>本方針Ⅱに規定する利用目的（第18号の第三者提供を除きます）とします。</p>
+    <h4>4. 共同利用の管理責任者</h4>
+    <div class="pp-box"><p style="margin:0 0 4px"><b>名称</b>：株式会社フィックスパワー</p><p style="margin:0 0 4px"><b>住所</b>：東京都豊島区東池袋二丁目６０番２号</p><p style="margin:0 0 4px"><b>代表者氏名</b>：代表取締役　髙橋　俊之介</p><p style="margin:0"><b>電話番号</b>：03-6821-4860</p></div>
+
+    <h3>Ⅲ－2－1. 電気事業における共同利用について</h3>
+    <h4>1. 共同利用する者の範囲</h4>
+    <p>当社は以下の者との間でお客さまの個人情報を共同で利用することがあります（※1）</p>
+    <ul>
+      <li>小売電気事業者（※2）</li><li>一般送配電事業者（※3）</li><li>配電事業者</li>
+      <li>需要抑制契約者（※4）</li><li>電力広域的運営推進機関（※5）</li>
+    </ul>
+    <h4>2. 共同利用の目的</h4>
+    <ul>
+      <li>託送供給契約または電力量調整供給契約（以下「託送供給等契約」といいます）の締結、変更または解約のため</li>
+      <li>小売供給契約（離島供給及び最終保障供給に関する契約を含みます）または電気受給契約（以下「小売供給等契約」といいます）の廃止取次（※6）のため</li>
+      <li>供給（受電）地点に関する情報の確認のため</li>
+      <li>電力量の検針、設備の保守・点検・交換、停電時・災害時等の設備の調査その他の託送供給等契約に基づく一般送配電事業者及び配電事業者の業務遂行のため</li>
+      <li>ネガワット取引に関する業務遂行のため</li>
+    </ul>
+    <h4>3. 共同利用する情報項目</h4>
+    <ul>
+      <li><b>基本情報</b>：氏名、住所、電話番号及び小売供給等契約の契約番号</li>
+      <li><b>供給（受電）地点に関する情報</b>：託送供給等契約を締結する一般送配電事業者及び配電事業者の供給区域、離島供給約款対象、供給（受電）地点特定番号、託送契約高情報、電流上限値、接続送電サービスメニュー、力率、供給方式、託送契約決定方法、計器情報、引込柱番号、系統連系設備有無、託送契約異動年月日、検針日、契約状態、廃止措置方法</li>
+      <li><b>ネガワット取引に関する情報</b>：発電販売量、需要調達量、需要抑制量、ベースライン</li>
+    </ul>
+    <h4>4. 共同利用の管理責任者</h4>
+    <ul>
+      <li><b>基本情報</b>：小売供給等契約を締結している小売電気事業者（但し、離島供給または最終保障供給を受けている需要者に関する基本情報については、一般送配電事業者）</li>
+      <li><b>供給（受電）地点に関する情報</b>：供給（受電）地点を供給区域とする一般送配電事業者及び配電事業者</li>
+      <li><b>ネガワット取引に関する情報</b>：需要抑制契約者</li>
+    </ul>
+    <div class="pp-box">
+      <p class="pp-note">※1 当社は、共同利用の目的のために必要な範囲の事業者に限定してお客さまの個人情報を共同利用するものであり、必ずしも全ての小売電気事業者、一般送配電事業者、需要抑制契約者及び配電事業者との間でお客さまの個人情報を共同利用するものではありません。</p>
+      <p class="pp-note">※2 小売電気事業者とは、電気事業法（昭和39年7月11日法律第170号）第2条の5第1項に規定する登録拒否事由に該当せず、小売電気事業者として経済産業大臣の登録を受けた事業者（電気事業法等の一部を改正する法律（平成26年法律第72号）の附則により、小売電気事業者の登録を受けたとみなされた事業者を含みます）をいいます（事業者の名称、所在地、代表者の氏名につきましては、<a href="http://www.enecho.meti.go.jp/category/electricity_and_gas/electric/summary/retailers_list/" target="_blank" rel="noopener">資源エネルギー庁のホームページ</a>をご参照ください）。</p>
+      <p class="pp-note">※3 一般送配電事業者とは、以下をいいます。</p>
+      <ul class="pp-note">
+        <li>北海道電力ネットワーク株式会社（<a href="https://www.hepco.co.jp/network/corporate/company/index.html" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>東北電力ネットワーク株式会社（<a href="https://nw.tohoku-epco.co.jp/company/profile/" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>東京電力パワーグリッド株式会社（<a href="https://www.tepco.co.jp/pg/company/summary/" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>中部電力パワーグリッド株式会社（<a href="https://powergrid.chuden.co.jp/corporate/company/com_outline/" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>北陸電力送配電株式会社（<a href="https://www.rikuden.co.jp/nw_company/" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>関西電力送配電株式会社（<a href="https://www.kansai-td.co.jp/corporate/profile/index.html" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>中国電力ネットワーク株式会社（<a href="https://www.energia.co.jp/nw/company/guide/outline/" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>四国電力送配電株式会社（<a href="https://www.yonden.co.jp/nw/corporate/summary/index.html" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>九州電力送配電株式会社（<a href="https://www.kyuden.co.jp/td_company_outline_index" target="_blank" rel="noopener">リンク</a>）</li>
+        <li>沖縄電力株式会社（<a href="https://www.okiden.co.jp/company/guide/" target="_blank" rel="noopener">リンク</a>）</li>
+      </ul>
+      <p class="pp-note">（事業者の名称、所在地、代表者の氏名については、各一般送配電事業者のホームページをご参照ください）</p>
+      <p class="pp-note">※4 需要抑制契約者とは、一般送配電事業者または配電事業者たる会員との間で需要抑制量調整供給契約を締結している事業者（契約締結前に事業者コードを取得している事業者を含みます）をいいます（事業者の名称、所在地、代表者の氏名については、<a href="https://www.occto.or.jp/privacy/negawatt-jigyousya.html" target="_blank" rel="noopener">電力広域的運営推進機関のホームページ</a>をご参照ください）。</p>
+      <p class="pp-note">※5 電力広域的運営推進機関の名称、所在地、代表者の氏名については、<a href="https://www.occto.or.jp/occto/about_occto/soshiki.html" target="_blank" rel="noopener">電力広域的運営推進機関のホームページ</a>をご参照ください。</p>
+      <p class="pp-note">※6 「小売供給等契約の廃止取次」とは、お客さまから新たに小売供給等契約の申込みを受けた事業者が、お客さまを代行して、既存の事業者に対して、小売供給等契約の解約の申込みを行うことをいいます。</p>
+    </div>
+
+    <h3>Ⅲ－2－2. 給付金の交付に係る共同利用について</h3>
+    <p>当社は、原子力立地給付金交付事業及び加算等給付金交付事業による給付金の交付を目的として、一般財団法人電源地域振興センターと個人情報等を共同利用いたします。共同利用する情報項目と共同利用の管理責任者は、前述の「Ⅲ－2－1. 電気事業における共同利用について」に記載のとおりとします。</p>
+
+    <h3>Ⅲ－3. ガス事業における共同利用について</h3>
+    <p>当社は、個人情報等をガスの供給・販売事業の運営に必要な以下の範囲内で共同利用いたします。</p>
+    <h4>1. 共同利用する情報の項目</h4>
+    <ul>
+      <li><b>基本情報</b>：氏名、住所、電話番号及びガス供給契約（以下「ガス小売供給契約」といいます）の契約番号</li>
+      <li><b>供給地点に関する情報</b>：供給地点特定番号、計器情報、負荷計測器有無、検針情報、供給圧力、託送契約異動情報、建物情報</li>
+      <li><b>供給地点に関する消費機器等の保安に関する情報</b>：ガス事業法（昭和29年法律第51号）第159条第4項に規定する通知に関する情報</li>
+      <li><b>ご請求に関する情報</b>：お支払方法、金融機関の口座番号、口座名義、クレジットカード番号等</li>
+    </ul>
+    <h4>2. 共同利用者の範囲</h4>
+    <p>共同利用する者の一覧（以下「ガス共同利用事業者」といいます）（※7）</p>
+    <ul>
+      <li>ガス小売事業者（※8）</li>
+      <li>一般ガス導管事業者（※9）</li>
+      <li>ガス料金等の債権の譲渡人もしくは譲受人またはガス料金等の請求収納業務の委託先</li>
+    </ul>
+    <h4>3. 共同利用者の利用目的</h4>
+    <p>ガス共同利用事業者は、個人情報等を、以下の利用目的の範囲で利用するものとします。</p>
+    <ul>
+      <li>託送供給契約の締結、変更または解約のため</li>
+      <li>ガス小売供給契約（最終保障供給に関する契約を含みます）の廃止取次（※10）及び供給者切替えに伴う消費機器等の保安に関する情報の提供のため</li>
+      <li>供給地点に関する情報の確認のため</li>
+      <li>ガス使用量の検針、設備の保守・点検・交換、ガス漏れ等の緊急時対応その他の託送供給契約に基づく一般ガス導管事業者の業務遂行のため</li>
+      <li>消費機器調査の結果の通知のため（※11）</li>
+      <li>ガス料金等の請求及び回収のため</li>
+    </ul>
+    <h4>4. 共同利用者の管理責任者</h4>
+    <ul>
+      <li><b>基本情報</b>：ガス小売供給契約を締結しているガス小売事業者（但し、最終保障供給を受けているお客さまに関する基本情報については、供給地点を供給区域とする一般ガス導管事業者）</li>
+      <li><b>供給地点に関する情報</b>：供給地点を供給区域とする一般ガス導管事業者（一般ガス導管事業者が行う特定ガス導管事業の供給地点を含みます）</li>
+      <li><b>供給地点に関する消費機器等の保安に関する情報</b>：ガス小売供給契約を締結しているガス小売事業者（但し、最終保障供給を受けているお客さまに関する情報については、供給地点を供給区域とする一般ガス導管事業者）</li>
+      <li><b>ご請求に関する情報</b>：ガス料金等の債権の譲受人（当社がガス料金等の債権を譲渡していない場合は当社）</li>
+    </ul>
+    <div class="pp-box">
+      <p class="pp-note">※7 当社は、共同利用の目的のために、情報項目ごとに必要な範囲の事業者を限定して、お客さまの個人情報等を共同利用するものであり、必ずしも全てのガス小売事業者及び一般ガス導管事業者との間でお客さまの個人情報等を共同利用するものではありません。</p>
+      <p class="pp-note">※8 ガス小売事業者とは、ガス事業法（昭和29年法律第51号）第6条第1項に規定する登録拒否事由に該当せず、ガス小売事業者として経済産業大臣の登録を受けた事業者（電気事業法等の一部を改正する等の法律（平成27年6月24日法律第47号）の附則により、ガス小売事業者の登録を受けたとみなされた事業者を含みます）をいいます（事業者の名称、所在地等につきましては、<a href="https://www.enecho.meti.go.jp/category/electricity_and_gas/gas/liberalization/retailers_list/" target="_blank" rel="noopener">資源エネルギー庁のホームページ</a>をご参照ください）。</p>
+      <p class="pp-note">※9 一般ガス導管事業者とは、ガス事業法（昭和29年法律第51号）第35条の許可を受けた事業者（電気事業法等の一部を改正する等の法律（平成27年6月24日法律第47号）の附則により、一般ガス導管事業者の許可を受けたとみなされた事業者を含みます）をいいます（事業者の名称、所在地等につきましては、<a href="http://www.gas.or.jp/jigyosya/" target="_blank" rel="noopener">日本ガス協会のホームページ</a>をご参照ください）。</p>
+      <p class="pp-note">※10 ガス小売供給契約の廃止取次とは、お客さまから新たにガス小売供給契約の申込みを受けた事業者が、お客さまを代行して、既存のガス小売事業者に対して、ガス小売供給契約の解約の申込みを行うことをいいます。</p>
+      <p class="pp-note">※11 ガス事業法（昭和29年法律第51号）第159条第4項の規定により、ガス小売事業者は、そのガス小売事業の用に供するためのガスに係る託送供給を行う一般ガス導管事業者に対し、消費機器調査の結果を通知します。</p>
+    </div>
+
+    <h3>Ⅲ－4. 役職員等の個人情報のグループ会社間における共同利用について</h3>
+    <p>当社は、当社が取得した役員及び従業員（退任者及び退職者を含みます）の個人情報を共同利用する場合がございます。</p>
+    <h4>1. 共同利用する情報の項目</h4>
+    <p>当社は、以下の個人情報を共同利用いたします。</p>
+    <ul>
+      <li>氏名、性別、生年月日、連絡先（住所、電話番号、メールアドレス等）、社員番号等個別に付与された識別番号、所属、役職、グレード、職歴、異動歴、職務権限に関する情報、家族の情報その他の従業員の属性に関する情報（但し、特定個人情報は含みません）</li>
+      <li>人事考課、表彰、懲戒、給与、賞与、退職手当、企業年金、社会保険、勤務状況、各種慶弔に関する情報その他の人事管理及び福利厚生に関する情報</li>
+      <li>教育・研修受講歴、保有資格、各種アセスメントの結果その他の従業員の能力に関する情報</li>
+      <li>その他、人事・経営業務管理上取得・保有する情報</li>
+    </ul>
+    <h4>2. 共同利用者の範囲</h4>
+    <p>当社の親会社、子会社及び兄弟会社（当社の親会社の子会社を指すものとします。）（以上を総称して「当社グループ」といいます。）、当社と出向契約を締結した会社、健康保険組合並びに福利厚生取扱い会社</p>
+    <h4>3. 利用する者の利用目的</h4>
+    <p>雇用管理（取締役についてはこれに準じた管理）及び人事関連事務処理等の各種手続き並びに取締役及び従業員の健康管理及び適正な就業環境の確保の目的に必要な範囲内で共同利用いたします。具体的には以下の目的を含みます。なお、本方針における従業員の個人情報の利用目的の範囲を超えて利用することはございません。</p>
+    <ul>
+      <li>適正な人事考課の実施</li>
+      <li>当社グループ内での人事異動等による人材の適正な配置の実施</li>
+      <li>当社グループに所属する人材の発掘、育成及び教育研修機会の提供</li>
+      <li>個人情報を解析または分析したデータによる人事制度、人事関連の諸施策及び人事方針の策定</li>
+      <li>当社グループの人事制度、人事関連の諸施策及び人事方針を策定し、またはこれらに関する事項を公表する際に必要な統計データの作成</li>
+    </ul>
+    <h4>4. 共同利用の管理責任者</h4>
+    <div class="pp-box"><p style="margin:0 0 4px"><b>名称</b>：株式会社フィックスパワー</p><p style="margin:0 0 4px"><b>住所</b>：東京都豊島区東池袋二丁目６０番２号</p><p style="margin:0 0 4px"><b>代表者氏名</b>：代表取締役　髙橋　俊之介</p><p style="margin:0"><b>電話番号</b>：03-6821-4860</p></div>
+
+    <h3>Ⅳ. 第三者提供について</h3>
+    <p>当社は、以下のいずれかに該当する場合を除き、個人情報を第三者へ提供いたしません。</p>
+    <ul>
+      <li>ご本人様の同意がある場合</li>
+      <li>統計的なデータなどご本人様を識別することができない状態で開示・提供する場合</li>
+      <li>法令に基づき開示・提供を求められた場合</li>
+      <li>人の生命、身体または財産の保護のために必要な場合であって、ご本人様の同意を得ることが困難である場合</li>
+      <li>国または地方公共団体等が公的な事務を実施するうえで、協力する必要がある場合であって、ご本人様の同意を得ることにより当該事務の遂行に支障を及ぼすおそれがある場合</li>
+    </ul>
+
+    <h3>Ⅴ. 安全管理措置について</h3>
+    <p>当社は、個人情報の漏洩、滅失または毀損の防止その他個人情報の安全管理のために、基本方針を策定し、組織的、物理的、技術的安全管理措置及び外的環境の把握等必要かつ適切な措置を講じます。なお、当社が講じる安全管理措置については、Ⅶの（3）の受付窓口までお問い合わせください。</p>
+
+    <h3>Ⅵ. 開示等のご請求について</h3>
+    <p>当社の開示対象個人情報に関して、ご本人様がご自身の情報の開示、内容の訂正、追加もしくは削除、または情報の利用の停止、消去もしくは第三者への提供の停止（以下総称して「開示等」といいます）をご希望される場合には、お申出いただいた方がご本人様であることを確認させていただいたうえで、法令に基づき合理的な期間及び範囲で、原則として書面により回答いたします。なお、開示することにより以下のいずれかに該当する場合には、当該個人情報の存否を明らかにすることを含め、開示のお申出に応じかねます。</p>
+    <ul>
+      <li>本人または第三者の生命、身体または財産その他の権利利益を害するおそれのある場合</li>
+      <li>違法または不当な行為を助長し、または誘発するおそれのある場合</li>
+      <li>国の安全が害されるおそれ、他国もしくは国際機関との信頼関係が損なわれるおそれまたは他国もしくは国際機関との交渉上不利益を被るおそれのある場合</li>
+      <li>犯罪の予防、鎮圧または捜査その他の公共の安全と秩序維持に支障が及ぶおそれのある場合</li>
+      <li>当社の業務の適正な実施に著しい支障を及ぼすおそれがある場合</li>
+      <li>他の法令に違反することとなる場合</li>
+    </ul>
+
+    <h3>Ⅶ. 開示等の受付方法・窓口について</h3>
+    <p>当社の開示対象個人情報に関する、上記Ⅵのお申出及びその他の個人情報に関するお問い合わせは、以下の方法にて受け付けます。なお、この受付方法によらない開示等の求めには応じられない場合がございますので、予めご了承ください。</p>
+    <h4>(1) 受付手続</h4>
+    <p>下記(3)の受付窓口にお電話の上お申出ください。受付手続についての詳細は、下記①の方法によりご本人様であることの確認をしたうえで、お申出いただいた際にご案内申し上げます。また、お申出内容によっては、当社所定の開示申込書（お手数ですが、本方針末尾のリンクをご確認ください）及び添付書類をご提出いただく場合がございますので、予めご了承ください。</p>
+    <p><b>① お電話口での本人確認の方法</b><br>氏名・住所・電話番号・生年月日等の当社ご登録情報をお電話口にて確認させていただきますので、予めご了承ください。</p>
+    <p><b>② 開示申込書が必要な場合</b><br>開示申込書及び添付書類（運転免許証、パスポート、健康保険の被保険者証、外国人登録証のいずれか１つの写しと現住所を確認できる書類（住民票の写し、公共料金の請求書の写し等））をご提出ください。詳細は、お手数ですが、本方針末尾のリンク先をご確認ください。代理人の方からのお申込の場合にご提出いただく書類：</p>
+    <ul>
+      <li>委任状</li>
+      <li>委任状に押印されたご本人様の印鑑の印鑑証明書</li>
+      <li>代理人ご自身の本人確認書類</li>
+    </ul>
+    <p class="pp-note">なお、ご提出いただいた証明書類等につきましては返却いたしかねますので、予めご了承ください。</p>
+    <h4>(2) 返信用のレターパックプラス（赤）</h4>
+    <p>開示請求（「利用目的の通知」「開示対象個人情報の開示」の請求）の求めに対し、書類の郵送による回答をご希望される場合につきましては、返信用封筒として、1件につき１通のレターパックプラス（赤）をご同封ください。なお、レターパックプラス（赤）は、現在適用されている郵便料金額に相当するレターパックをご送付ください。</p>
+    <h4>(3) 受付窓口</h4>
+    <div class="pp-contact">
+      <p style="margin:0 0 4px"><b>住所</b>：東京都豊島区東池袋二丁目６０番２号</p>
+      <p style="margin:0 0 4px"><b>名称</b>：株式会社フィックスパワー 個人情報受付窓口</p>
+      <p style="margin:0 0 4px"><b>電話</b>：03-6821-4860</p>
+      <p style="margin:0" class="pp-note">受付時間は平日の午前10時から午後5時までとさせていただきます。土日祝祭日並びに夏季休暇及び年末年始休暇の期間を除きます。</p>
+    </div>
+
+    <h3>附則</h3>
+    <p>法令・各種ガイドライン等の制定や変更等に伴い、本方針を変更することがございます。本方針の変更につきましては当社ホームページ上において公表いたします。</p>
+
+    <div class="pp-updated">株式会社フィックスパワー</div>
+    <div style="text-align:center;margin-top:24px"><button type="button" class="pp-close js-privacy-close">✕ 閉じてLPに戻る</button></div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var ov=document.getElementById('privacy');
+    function open(e){ if(e)e.preventDefault(); ov.classList.add('open'); document.body.classList.add('pp-lock'); ov.scrollTop=0; }
+    function close(e){ if(e)e.preventDefault(); ov.classList.remove('open'); document.body.classList.remove('pp-lock');
+      if(location.hash==='#privacy'){ history.replaceState(null,'',location.pathname+location.search); } }
+    document.querySelectorAll('.js-privacy').forEach(function(a){ a.addEventListener('click',open); });
+    document.querySelectorAll('.js-privacy-close').forEach(function(b){ b.addEventListener('click',close); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) close(); });
+    if(location.hash==='#privacy'){ open(); }
+  })();
+</script>
 
 <script>
   // FAQアコーディオン
